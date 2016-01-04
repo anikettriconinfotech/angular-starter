@@ -9,7 +9,28 @@ var print = require('gulp-print');
 var gulpif = require('gulp-if');
 var autoprefixer = require('gulp-autoprefixer');
 var del = require('del');
+var server = require( 'gulp-develop-server' );
+var bs = require( 'browser-sync' );
 
+var options = {
+    server: {
+        path: config.serverPath
+    },
+    bs: {
+        proxy: 'http://localhost:3659',
+        port : 3001,
+        files : config.appFiles,
+        reloadDelay : 600,
+        notify : false,
+        injectChanges : true
+    }
+};
+
+gulp.task( 'serve-dev', function() {
+    server.listen( options.server, function( error ) {
+        if( ! error ) bs( options.bs );
+    });
+});
 
 gulp.task('lint',function() {
 

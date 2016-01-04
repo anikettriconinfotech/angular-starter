@@ -80,5 +80,7 @@
     "yui"           : false,   
 
     // Custom Globals
-    "globals"       : {}       
+    "globals"       : {
+        "angular" : false
+    }       
 }

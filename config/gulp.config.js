@@ -8,7 +8,10 @@ module.exports = (function() {
     styles : client + 'styles/**/*.css',    
     dist : dist,
     allDistFiles : dist + '/*',
-    distStyles : dist + '/styles'
+    distStyles : dist + '/styles',
+    appFiles : [client + 'index.html', client + 'styles/**/*.css',
+                client + 'app/**/*.js',client + 'app/**/*.html'],
+    serverPath : './server/server.js'            
   };
 
   return config;
