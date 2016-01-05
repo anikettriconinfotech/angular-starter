@@ -3,8 +3,14 @@
 
 <head>
     <title></title>
+    
+    <!-- build:css css/lib.css -->
     <link rel="stylesheet" type="text/css" href="lib/angular-material/angular-material.css">
+    <!-- endbuild -->
+
+    <!-- build:css css/app.css -->
     <link rel="stylesheet" type="text/css" href="styles/app.css">
+    <!-- endbuild -->
 </head>
 
 <body ng-controller="AppController as app">
@@ -12,7 +18,7 @@
     <div>{{app.name}}
         <nav>
             <a href="#" ui-sref='home'>home</a>
-            <a href="#" ui-sref='view2'>View2</a>
+            <a href="#" ui-sref='view2'>View2</a> 
         </nav>    
     </div>
 
@@ -20,6 +26,7 @@
 
 
     <!-- Lib dependencies -->
+    <!-- build:js js/lib.js -->
 
     <script type="text/javascript" src="lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="lib/angular/angular.js"></script>
@@ -29,16 +36,24 @@
     <script type="text/javascript" src="lib/angular-messages/angular-messages.min.js"></script>
     <script type="text/javascript" src="lib/angular-material/angular-material.js"></script>
 
+    <!-- endbuild -->
     <!-- Lib dependencies Ends-->
 
-
+    
     <!-- App script dependencies -->
+    <!-- build:js js/app.js -->
     <script type="text/javascript" src="app/app.js"></script>  
-    <script type="text/javascript" src="app/core/app.controller.js"></script>  
     <script type="text/javascript" src="app/core/app.modules.js"></script>  
+    <script type="text/javascript" src="app/core/app.controller.js"></script>  
 
     <script type="text/javascript" src="app/test/home.controller.js"></script>
     <script type="text/javascript" src="app/test/view2.controller.js"></script>
+
+    <!-- inject:templates:js -->
+
+    <!-- endinject -->
+    <!-- endbuild -->
+
     <!-- App script dependencies Ends-->
 
 

@@ -9,6 +9,7 @@
         'ngMessages',    
 
         //App Dependencies
+        'agora.core',
         'agora.test']);
 
     app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
