@@ -19,6 +19,12 @@ var plumber = require('gulp-plumber');
 var inject = require('gulp-inject');
 var debug = require('gulp-debug');
 var useref = require('gulp-useref');
+var csso = require('gulp-csso');
+var uglify = require('gulp-uglify');
+
+var filter = require('gulp-filter');
+var rev = require('gulp-rev');
+var revReplace = require('gulp-rev-replace');
 
 var serverOptions = {
   path: config.serverPath
@@ -123,6 +129,8 @@ gulp.task('template-cache',['clean-dist'],function() {
 gulp.task('optimize',['template-cache'],function() {
 
   var templateCacheFile = config.distCache + config.templateCache.file; 
+  var cssFilter = filter('**/*.css',{restore : true});
+  var jsFilter = filter('**/*.js',{restore : true});
 
   return gulp
           .src(config.index)
@@ -133,6 +141,14 @@ gulp.task('optimize',['template-cache'],function() {
             addRootSlash: false
           }))
           .pipe(useref())
+          .pipe(cssFilter)
+          .pipe(csso())
+          .pipe(cssFilter.restore)
+          .pipe(jsFilter)
+          .pipe(uglify())
+          .pipe(jsFilter.restore)
+          .pipe(rev())
+          .pipe(revReplace())
           .pipe(gulp.dest(config.dist));
 
 });
