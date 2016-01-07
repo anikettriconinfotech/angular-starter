@@ -9,7 +9,7 @@
     function AppController() {
 
         var vm = this;
-        vm.name = 'test';
+        vm.name = 'app';
     }      
 
 })();

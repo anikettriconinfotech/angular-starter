@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 client/lib
 client/dist
+test/unit/coverage

@@ -26,6 +26,8 @@ var filter = require('gulp-filter');
 var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
 
+var Server = require('karma').Server;
+
 var serverOptions = {
   path: config.serverPath
 };
@@ -90,6 +92,12 @@ function startBrowserSync(isDev,watch) {
   bs(options);  
 
 }
+
+gulp.task('test', function (done) {
+  return new Server({
+    configFile: __dirname + '/karma.conf.js'
+  }, done).start();
+});
 
 gulp.task('lint',function() {
 
