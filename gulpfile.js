@@ -131,9 +131,10 @@ gulp.task('optimize',['template-cache'],function() {
   var templateCacheFile = config.distCache + config.templateCache.file; 
   var cssFilter = filter('**/*.css',{restore : true});
   var jsFilter = filter('**/*.js',{restore : true});
+  var htmlFilter = filter(['**/*.js','**/*.css'],{restore : true});
 
   return gulp
-          .src(config.index)
+          .src(config.index)  
           .pipe(plumber())
           .pipe(inject(gulp.src(templateCacheFile, {read : false}), {
             starttag : '<!-- inject:templates:js -->',
@@ -147,12 +148,15 @@ gulp.task('optimize',['template-cache'],function() {
           .pipe(jsFilter)
           .pipe(uglify())
           .pipe(jsFilter.restore)
+          .pipe(htmlFilter)
           .pipe(rev())
+          .pipe(htmlFilter.restore)
           .pipe(revReplace())
+          .pipe(gulp.dest(config.dist))
+          .pipe(rev.manifest())
           .pipe(gulp.dest(config.dist));
 
 });
-
 
 function log(msg) {
   util.log(util.colors.yellow(msg));
