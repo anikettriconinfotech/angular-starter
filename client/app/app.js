@@ -31,6 +31,5 @@
         $urlRouterProvider.otherwise('/home');
     }]);
 
-
 })();
 

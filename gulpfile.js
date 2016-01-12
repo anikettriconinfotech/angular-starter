@@ -25,6 +25,7 @@ var uglify = require('gulp-uglify');
 var filter = require('gulp-filter');
 var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
+var csscomb = require('gulp-csscomb');
 
 var Server = require('karma').Server;
 
@@ -70,112 +71,115 @@ gulp.task( 'serve-build-watch',['optimize'], function() {
 
 function startBrowserSync(isDev,watch) {
 
-  if(args.nosync || bs.active) {
-    return;
-  }
+    if(args.nosync || bs.active) {
+      return;
+    }
 
-  var filesToWatch = isDev ? config.appFiles : [];
+    var filesToWatch = isDev ? config.appFiles : [];
 
-  if(!isDev && watch) {
-    gulp.watch(config.appFiles,['optimize',bs.reload]);
-  }
+    if(!isDev && watch) {
+      gulp.watch(config.appFiles,['optimize',bs.reload]);
+    }
 
-  var options = {
-        proxy: 'http://localhost:3659',
-        port : 3001,
-        files : filesToWatch,
-        reloadDelay : 600,
-        notify : false,
-        injectChanges : true
-    };
+    var options = {
+          proxy: 'http://localhost:3659',
+          port : 3001,
+          files : filesToWatch,
+          reloadDelay : 600,
+          notify : false,
+          injectChanges : true
+      };
 
-  bs(options);  
+    bs(options);  
 
 }
 
-gulp.task('test', function (done) {
-  return new Server({
-    configFile: __dirname + '/karma.conf.js'
-  }, done).start();
+gulp.task('test',['lint'], function (done) {
+    return new Server({
+      configFile: __dirname + '/karma.conf.js'
+    }, done).start();
 });
 
 gulp.task('lint',function() {
 
-  log('Analyzing source files with jshint and jscs');
+    log('Analyzing source files with jshint and jscs');
 
-  return gulp.src([config.srcJs])
-  .pipe(gulpif(args.verbose,print()))
-  .pipe(jscs())
-  .pipe(jscs.reporter())
-  .pipe(jscs.reporter('fail'))
-  .pipe(jshint())
-  .pipe(jshint.reporter('jshint-stylish', {verbose : true} ))
-  .pipe(jshint.reporter('fail'));
+    return gulp
+               .src([config.srcJs])
+               .pipe(gulpif(args.verbose,print()))
+               .pipe(jscs())
+               .pipe(jscs.reporter())
+               .pipe(jscs.reporter('fail'))
+               .pipe(jshint())
+               .pipe(jshint.reporter('jshint-stylish', {verbose : true} ))
+               .pipe(jshint.reporter('fail'));
 });
 
 
 gulp.task('css',['clean-css'],function() {
 
-  log('Doing Autoprefixing to css files');
+    log('Doing Autoprefixing to css files');
 
-  return gulp.src([config.styles])
-  .pipe(autoprefixer())
-  .pipe(gulp.dest(config.distStyles)) 
+    return gulp
+            .src([config.styles])
+            .pipe(autoprefixer())
+            .pipe(csscomb())
+            .pipe(gulp.dest(config.stylesDir)); 
 });
 
 gulp.task('help',taskListing);
 
-gulp.task('template-cache',['clean-dist'],function() {
+gulp.task('template-cache',[],function() {
 
-  return gulp
+    return gulp
           .src(config.htmlTemplates)
           .pipe(htmlMin({}))
           .pipe(angularTemplateCache(config.templateCache.file,config.templateCache.options))
           .pipe(gulp.dest(config.distCache));
 });
 
-gulp.task('optimize',['template-cache'],function() {
+gulp.task('optimize',['clean-dist','template-cache'],function() {
 
-  var templateCacheFile = config.distCache + config.templateCache.file; 
-  var cssFilter = filter('**/*.css',{restore : true});
-  var jsFilter = filter('**/*.js',{restore : true});
-  var htmlFilter = filter(['**/*.js','**/*.css'],{restore : true});
-
-  return gulp
-          .src(config.index)  
-          .pipe(plumber())
-          .pipe(inject(gulp.src(templateCacheFile, {read : false}), {
-            starttag : '<!-- inject:templates:js -->',
-            ignorePath: '/client',
-            addRootSlash: false
-          }))
-          .pipe(useref())
-          .pipe(cssFilter)
-          .pipe(csso())
-          .pipe(cssFilter.restore)
-          .pipe(jsFilter)
-          .pipe(uglify())
-          .pipe(jsFilter.restore)
-          .pipe(htmlFilter)
-          .pipe(rev())
-          .pipe(htmlFilter.restore)
-          .pipe(revReplace())
-          .pipe(gulp.dest(config.dist))
-          .pipe(rev.manifest())
-          .pipe(gulp.dest(config.dist));
+    var templateCacheFile = config.distCache + config.templateCache.file; 
+    var cssFilter = filter('**/*.css',{restore : true});
+    var jsFilter = filter('**/*.js',{restore : true});
+    var htmlFilter = filter(['**/*.js','**/*.css'],{restore : true});
+    
+    return  gulp
+               .src(config.index)  
+               .pipe(plumber())
+               .pipe(inject(gulp.src(templateCacheFile, {read : false}), {
+                 starttag : '<!-- inject:templates:js -->',
+                 ignorePath: '/client',
+                 addRootSlash: false
+               }))
+               .pipe(useref())
+               .pipe(cssFilter)
+               .pipe(csso())
+               .pipe(cssFilter.restore)
+               .pipe(jsFilter)
+               .pipe(uglify())
+               .pipe(jsFilter.restore)
+               .pipe(htmlFilter)
+               .pipe(rev())
+               .pipe(htmlFilter.restore)
+               .pipe(revReplace())
+               .pipe(gulp.dest(config.dist))
+               .pipe(rev.manifest())
+               .pipe(gulp.dest(config.dist));
 
 });
 
 function log(msg) {
-  util.log(util.colors.yellow(msg));
+    util.log(util.colors.yellow(msg));
 }
 
 function clean(path,done) {
-  log('Cleaning: '+path);
-  del(path).then(function (paths) {
-      log('Cleaning Done');
-      done();
-  });
+    log('Cleaning: '+path);
+    del(path).then(function (paths) {
+        log('Cleaning Done');
+        done();
+    });
 }
 
 gulp.task('images',['clean-images'],function() {
@@ -188,21 +192,20 @@ gulp.task('images',['clean-images'],function() {
 });
 
 gulp.task('clean-dist',function(done) {
-  log('Cleaning Dist');
-  var path = config.allDistFiles;
-  clean(path,done);
+    log('Cleaning Dist');
+    var path = config.allDistFiles;
+    clean(path,done);
 });
 
 gulp.task('clean-css',function(done) {
-  log('Cleaning Dist Css');
-  var path = config.distStyles;
-  clean(path,done);
+    log('Cleaning Dist Css');
+    var path = config.distStyles;
+    clean(path,done);
 });
 
 gulp.task('clean-images',function(done) {
-  log('Cleaning Dist Images');
-  var path = config.distImages;
-  clean(path,done);
+    log('Cleaning Dist Images');
+    var path = config.distImages;
+    clean(path,done);
 });
-
 

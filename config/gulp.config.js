@@ -6,6 +6,7 @@ module.exports = (function() {
   var config = {
     srcJs : client + 'app/**/*.js',
     styles : client + 'styles/**/*.css',
+    stylesDir : client + 'styles',
     htmlTemplates : client + 'app/**/*.html',    
     dist : dist,
     allDistFiles : dist + '/*',
