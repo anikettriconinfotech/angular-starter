@@ -2,15 +2,15 @@
 
     'use strict';
 
-    var app = angular.module('agora', [
+    var app = angular.module('starter', [
         // Third Party Dependencies
         'ui.router',
         'ngMaterial', 
         'ngMessages',    
 
         //App Dependencies
-        'agora.core',
-        'agora.test']);
+        'starter.core',
+        'starter.test']);
 
     app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 

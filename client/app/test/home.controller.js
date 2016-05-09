@@ -2,7 +2,7 @@
 
     'use strict';
 
-    var app = angular.module('agora.test');
+    var app = angular.module('starter.test');
 
     app.controller('HomeController',HomeController);
 

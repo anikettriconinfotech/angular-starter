@@ -2,7 +2,7 @@
 
     'use strict';
 
-    angular.module('agora.core',[]);
-    angular.module('agora.test',[]);
+    angular.module('starter.core',[]);
+    angular.module('starter.test',[]);
 
 })();

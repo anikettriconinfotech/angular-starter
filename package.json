@@ -1,7 +1,7 @@
 {
-  "name": "agora",
+  "name": "starter",
   "version": "0.0.1",
-  "description": "A book management app",
+  "description": "An angular starter app",
   "main": "app.js",
   "scripts": {
     "test": "npm test",

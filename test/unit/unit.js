@@ -5,7 +5,7 @@ describe('StudentTodoListingController',function() {
   var $scope,$rootScope,studentTodosApiService,controller,controllerConstructor,$state;
 
   beforeEach(function() {
-    module('agora');
+    module('starter');
 
     inject(function($injector) {
       $rootScope = $injector.get('$rootScope');
@@ -15,8 +15,8 @@ describe('StudentTodoListingController',function() {
     });   
   })
 
-  it('should call getTodosForStudent of studentTodosApiService when todos is not fetched',function() {
-    
+  it('should work',function() {
+
     controller = controllerConstructor('AppController as app',{$scope : $scope });
     expect($scope.app.name).toBe('app');
   });
