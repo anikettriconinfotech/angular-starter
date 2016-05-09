@@ -11,3 +11,6 @@ build setups. live reloading is integrated into it.
   bower install. Select angular 1.4 versions. It may not work with versions 1.5.
   gulp serve-dev to start the server.
   gulp test to test the test cases.
+  ```
+  
+ Please Note: If there is any problem installing gulp-jshint install jshint first and then install gulp-jshint. And as npm has a problem with windows, if npm install fails try doing npm cache clean and then npm install.
